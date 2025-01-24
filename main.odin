@@ -6,7 +6,7 @@ import "core:os"
 
 import "moon"
 
-output_format :: "{{\"text\": \"%r\", \"tooltip\": \"%s +%dd %dh %dm\\n%s -%dd %dh %dm\"}}"
+output_format :: "{{\"text\": \"%r\", \"tooltip\": \"%s\\nMoon age: %dd %dh %dm\"}}"
 
 main :: proc() {
     if len(os.args) < 2 {
@@ -19,16 +19,13 @@ main :: proc() {
     //fmt.println(last_new_moon)
     age := moon.find_moon_age(last_new_moon)
     frac := moon.find_month_fraction(age)
-    phase, time_since_phase := moon.find_phase_info(frac)
-    days, hours, minutes := get_duration_elements(time_since_phase)
-    next_phase := moon.next_phase(phase)
-    time_to_phase := moon.time_to_phase(time_since_phase)
-    mdays, mhours, mminutes := get_duration_elements(time_to_phase)
+    phase := moon.get_phase(frac)
+    days, hours, minutes := get_duration_elements(age)
     fmt.printfln(
         output_format,
         moon.get_icon(frac),
-        moon.string_of_phase(phase), days, hours, minutes,
-        moon.string_of_phase(next_phase), mdays, mhours, mminutes,
+        moon.string_of_phase(phase),
+        days, hours, minutes,
     )
 }
 

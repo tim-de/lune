@@ -19,7 +19,3 @@ Then use the `custom/moonphase` module wherever you'd like in waybar!
 ## Notes
 
 - Has a build dependency on libcurl, but like, who doesn't have libcurl?
-- This currently isn't very accurate. It gets the phase based on a recent
-known new moon, which has turned out to be a worse approximation than
-previously thought, so I plan to replace this with a more accurate direct
-calculation which will also remove the need to get data from the internet

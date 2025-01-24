@@ -11,6 +11,17 @@ MajorPhase :: enum {
     LastQuarter,
 }
 
+Phase :: enum {
+    NewMoon,
+    WaxingCrescent,
+    FirstQuarter,
+    WaxingGibbous,
+    FullMoon,
+    WaningGibbous,
+    LastQuarter,
+    WaningCrescent,
+}
+
 Icons := []rune{
     '', '', '', '', '', '', '',
     '', '', '', '', '', '', '',
@@ -24,6 +35,27 @@ find_moon_age :: proc(last_full_moon: time.Time) -> time.Duration {
 
 find_month_fraction :: proc(age: time.Duration) -> f64 {
     return f64(age) / f64(LUNARMONTH)
+}
+
+get_phase :: proc(fraction: f64) -> Phase {
+    switch {
+    case fraction <= 0.01 || fraction >= 0.99:
+        return .NewMoon
+    case fraction <= 0.24:
+        return .WaxingCrescent
+    case fraction > 0.24 && fraction < 0.26:
+        return .FirstQuarter
+    case fraction <= 0.49:
+        return .WaxingGibbous
+    case fraction > 0.49 && fraction < 0.51:
+        return .FullMoon
+    case fraction <= 0.74:
+        return .WaningGibbous
+    case fraction > 0.74 && fraction < 0.76:
+        return .LastQuarter
+    case:
+        return .WaningCrescent
+    }
 }
 
 find_phase_info :: proc(fraction: f64) -> (MajorPhase, time.Duration) {
@@ -41,7 +73,12 @@ next_phase :: proc(phase: MajorPhase) -> MajorPhase {
     return MajorPhase((int(phase) + 1) % 4)
 }
 
-string_of_phase :: proc(phase: MajorPhase) -> string {
+string_of_phase :: proc {
+    string_of_major_phase,
+    string_of_minor_phase,
+}
+
+string_of_major_phase :: proc(phase: MajorPhase) -> string {
     switch phase {
     case .NewMoon:
         return "New Moon"
@@ -51,6 +88,28 @@ string_of_phase :: proc(phase: MajorPhase) -> string {
         return "Full Moon"
     case .LastQuarter:
         return "Last Quarter"
+    }
+    panic("Invalid phase value")
+}
+
+string_of_minor_phase :: proc(phase: Phase) -> string {
+    switch phase {
+    case .NewMoon:
+        return "New Moon"
+    case .WaxingCrescent:
+        return "Waxing Crescent"
+    case .FirstQuarter:
+        return "First Quarter"
+    case .WaxingGibbous:
+        return "Waxing Gibbous"
+    case .FullMoon:
+        return "Full Moon"
+    case .WaningGibbous:
+        return "Waning Gibbous"
+    case .LastQuarter:
+        return "Last Quarter"
+    case .WaningCrescent:
+        return "Waning Crescent"
     }
     panic("Invalid phase value")
 }
