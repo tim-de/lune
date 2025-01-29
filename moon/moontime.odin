@@ -39,7 +39,7 @@ find_month_fraction :: proc(age: time.Duration) -> f64 {
 
 get_phase :: proc(fraction: f64) -> Phase {
     switch {
-    case fraction <= 0.01 || fraction >= 0.99:
+    case fraction <= 0.02 || fraction >= 0.98:
         return .NewMoon
     case fraction <= 0.24:
         return .WaxingCrescent

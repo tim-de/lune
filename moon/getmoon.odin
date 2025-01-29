@@ -56,6 +56,10 @@ get_last_new_moon :: proc(cachefile: string) -> (last_moon: time.Time, ok: bool)
         }
         return last_moon, false
     } else {
+        last_lunar_month := get_lunar_month(last_moon)
+        if time.since(last_moon) > last_lunar_month {
+            last_moon = time.time_add(last_moon, last_lunar_month)
+        }
         return last_moon, true
     }
 }
